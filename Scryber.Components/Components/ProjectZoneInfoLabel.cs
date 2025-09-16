@@ -19,8 +19,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Scryber.Native;
+using Scryber.PDF.Native;
 using Scryber.Styles;
+using Scryber.PDF.Layout;
+using Scryber.PDF;
 
 namespace Scryber.Components
 {
@@ -63,7 +65,7 @@ namespace Scryber.Components
         #endregion
 
         // local reference to the layout document
-        private Layout.PDFLayoutDocument _doc;
+        private PDFLayoutDocument _doc;
 
         // local reference to the layout context for data access
         private PDFLayoutContext _layoutContext;
@@ -117,7 +119,7 @@ namespace Scryber.Components
 
 
         public ProjectZoneInfoLabel()
-            : base(PDFObjectTypes.Text)
+            : base(ObjectTypes.Text)
         {
         }
 
@@ -127,30 +129,35 @@ namespace Scryber.Components
         /// <param name="context"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        protected override Text.PDFTextReader CreateReader(PDFLayoutContext context, Styles.Style style)
+        protected override Text.PDFTextReader CreateReader(ContextBase context, Styles.Style style)
         {
-            _doc = context.DocumentLayout;
-            _layoutContext = context;
-            _renderpageindex = _doc.CurrentPageIndex;
-            _fullstyle = style;
+            if (context is PDF.PDFLayoutContext layout)
+            {
+                _doc = layout.DocumentLayout;
+                _layoutContext = layout;
+                _renderpageindex = _doc.CurrentPageIndex;
+                _fullstyle = style;
 
-            string text = this.GetDisplayText(_renderpageindex, style, false);
-            Scryber.Text.PDFTextProxyOp op = new Text.PDFTextProxyOp(this, "ProjectZoneInfo", text);
-            Scryber.Text.PDFArrayTextReader array = new Text.PDFArrayTextReader(new Text.PDFTextOp[] { op });
-            _zoneProxy = op;
+                string text = this.GetDisplayText(_renderpageindex, style, false);
+                Scryber.Text.PDFTextProxyOp op = new Text.PDFTextProxyOp(this, "ProjectZoneInfo", text);
+                Scryber.Text.PDFArrayTextReader array = new Text.PDFArrayTextReader(new Text.PDFTextOp[] { op });
+                _zoneProxy = op;
 
-            return array;
+                return array;
+            }
+            else
+                return null;
         }
 
         /// <summary>
         /// Once layout is complete then we can replace the text that was used when not rendering
         /// with the text that has the actual zone information.
         /// </summary>
-        internal override void RegisterLayoutComplete(PDFLayoutContext context)
+        internal override void RegisterLayoutComplete(LayoutContext context)
         {
             base.RegisterLayoutComplete(context);
 
-            PDFComponentArrangement arrange = this.GetFirstArrangement();
+            ComponentArrangement arrange = this.GetFirstArrangement();
             if (null != arrange)
             {
                 this._renderpageindex = arrange.PageIndex;
