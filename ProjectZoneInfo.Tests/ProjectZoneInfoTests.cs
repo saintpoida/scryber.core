@@ -558,12 +558,12 @@ namespace ProjectZoneInfo.Tests
                         </div>
                     </header>
 
-                    <!-- Page 1: TechCorp Content with hidden data -->
+                    <!-- Page 1: TechCorp Content with VISIBLE data for debugging -->
                     <div class='company-section'>
-                        <!-- Hidden data divs for this page context -->
-                        <div id='data-organization' style='display: none;'>TechCorp Solutions</div>
-                        <div id='data-division' style='display: none;'>Software Engineering</div>
-                        <div id='data-project' style='display: none;'>Cloud Platform</div>
+                        <!-- Data divs (now visible for debugging) -->
+                        <div id='data-organization' style='background: yellow; padding: 5px; border: 1px solid red;'>TechCorp Solutions</div>
+                        <div id='data-division' style='background: yellow; padding: 5px; border: 1px solid red;'>Software Engineering</div>
+                        <div id='data-project' style='background: yellow; padding: 5px; border: 1px solid red;'>Cloud Platform</div>
 
                         <div class='company-title'>TechCorp Solutions Inc.</div>
                         <div class='company-details'>
@@ -578,12 +578,12 @@ namespace ProjectZoneInfo.Tests
                         Page 1 Content - TechCorp Context
                     </div>
 
-                    <!-- Page 2: Manufacturing Content with different hidden data -->
+                    <!-- Page 2: Manufacturing Content with VISIBLE data for debugging -->
                     <div class='company-section'>
-                        <!-- Hidden data divs for this page context -->
-                        <div id='data-organization' style='display: none;'>Global Manufacturing Ltd</div>
-                        <div id='data-division' style='display: none;'>Operations</div>
-                        <div id='data-project' style='display: none;'>Quality Assurance</div>
+                        <!-- Data divs (now visible for debugging) -->
+                        <div id='data-organization' style='background: yellow; padding: 5px; border: 1px solid red;'>Global Manufacturing Ltd</div>
+                        <div id='data-division' style='background: yellow; padding: 5px; border: 1px solid red;'>Operations</div>
+                        <div id='data-project' style='background: yellow; padding: 5px; border: 1px solid red;'>Quality Assurance</div>
 
                         <div class='company-title'>Global Manufacturing Ltd.</div>
                         <div class='company-details'>
@@ -598,12 +598,12 @@ namespace ProjectZoneInfo.Tests
                         Page 2 Content - Manufacturing Context
                     </div>
 
-                    <!-- Page 3: Finance Content with different hidden data -->
+                    <!-- Page 3: Finance Content with VISIBLE data for debugging -->
                     <div class='company-section'>
-                        <!-- Hidden data divs for this page context -->
-                        <div id='data-organization' style='display: none;'>Finance First Bank</div>
-                        <div id='data-division' style='display: none;'>Investment Banking</div>
-                        <div id='data-project' style='display: none;'>Market Analysis</div>
+                        <!-- Data divs (now visible for debugging) -->
+                        <div id='data-organization' style='background: yellow; padding: 5px; border: 1px solid red;'>Finance First Bank</div>
+                        <div id='data-division' style='background: yellow; padding: 5px; border: 1px solid red;'>Investment Banking</div>
+                        <div id='data-project' style='background: yellow; padding: 5px; border: 1px solid red;'>Market Analysis</div>
 
                         <div class='company-title'>Finance First Bank</div>
                         <div class='company-details'>
@@ -618,12 +618,12 @@ namespace ProjectZoneInfo.Tests
                         Page 3 Content - Finance Context
                     </div>
 
-                    <!-- Page 4: Healthcare Content with different hidden data -->
+                    <!-- Page 4: Healthcare Content with VISIBLE data for debugging -->
                     <div class='company-section'>
-                        <!-- Hidden data divs for this page context -->
-                        <div id='data-organization' style='display: none;'>Healthcare Systems Corp</div>
-                        <div id='data-division' style='display: none;'>Clinical Research</div>
-                        <div id='data-project' style='display: none;'>Drug Development</div>
+                        <!-- Data divs (now visible for debugging) -->
+                        <div id='data-organization' style='background: yellow; padding: 5px; border: 1px solid red;'>Healthcare Systems Corp</div>
+                        <div id='data-division' style='background: yellow; padding: 5px; border: 1px solid red;'>Clinical Research</div>
+                        <div id='data-project' style='background: yellow; padding: 5px; border: 1px solid red;'>Drug Development</div>
 
                         <div class='company-title'>Healthcare Systems Corp</div>
                         <div class='company-details'>

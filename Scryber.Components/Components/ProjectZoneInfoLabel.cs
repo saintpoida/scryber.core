@@ -211,11 +211,15 @@ namespace Scryber.Components
         private string GetZoneInfoForPage(int pageIndex)
         {
             var zoneParts = new List<string>();
+            var debugInfo = new List<string>();
+
+            debugInfo.Add($"PageIndex: {pageIndex}");
 
             // Try to get Level0Name data
             if (!string.IsNullOrEmpty(Level0Name))
             {
                 string level0Value = GetDataValue(Level0Name);
+                debugInfo.Add($"Level0({Level0Name}): '{level0Value}'");
                 if (!string.IsNullOrEmpty(level0Value))
                     zoneParts.Add(level0Value);
             }
@@ -224,6 +228,7 @@ namespace Scryber.Components
             if (!string.IsNullOrEmpty(Level1Name))
             {
                 string level1Value = GetDataValue(Level1Name);
+                debugInfo.Add($"Level1({Level1Name}): '{level1Value}'");
                 if (!string.IsNullOrEmpty(level1Value))
                     zoneParts.Add(level1Value);
             }
@@ -232,13 +237,15 @@ namespace Scryber.Components
             if (!string.IsNullOrEmpty(Level2Name))
             {
                 string level2Value = GetDataValue(Level2Name);
+                debugInfo.Add($"Level2({Level2Name}): '{level2Value}'");
                 if (!string.IsNullOrEmpty(level2Value))
                     zoneParts.Add(level2Value);
             }
 
             // Join non-empty parts with " > " separator and add "Level: " prefix
             string zoneText = zoneParts.Count > 0 ? string.Join(" > ", zoneParts) : "No zone info available";
-            return "Level: " + zoneText;
+            string debugPrefix = $"[{string.Join(", ", debugInfo)}] ";
+            return debugPrefix + "Level: " + zoneText;
         }
 
         private string GetDataValue(string fieldName)
