@@ -558,50 +558,79 @@ namespace ProjectZoneInfo.Tests
                         </div>
                     </header>
 
-                    <!-- Main content that will cause page breaks -->
+                    <!-- Page 1: TechCorp Content with hidden data -->
                     <div class='company-section'>
-                        <div class='company-title'>First Company Section</div>
+                        <!-- Hidden data divs for this page context -->
+                        <div id='data-organization' style='display: none;'>TechCorp Solutions</div>
+                        <div id='data-division' style='display: none;'>Software Engineering</div>
+                        <div id='data-project' style='display: none;'>Cloud Platform</div>
+
+                        <div class='company-title'>TechCorp Solutions Inc.</div>
                         <div class='company-details'>
-                            <p><strong>Organization:</strong> Global Tech Solutions</p>
-                            <p><strong>Division:</strong> Software Development</p>
-                            <p><strong>Project:</strong> Cloud Migration Initiative</p>
-                            <p>This is the first section of our report. The header above should contain the zone information and repeat on every page as content flows.</p>
+                            <p><strong>Organization:</strong> TechCorp Solutions</p>
+                            <p><strong>Division:</strong> Software Engineering</p>
+                            <p><strong>Project:</strong> Cloud Platform</p>
+                            <p>This is the first company section. The header above should show TechCorp's zone information.</p>
                         </div>
                     </div>
 
                     <div class='page-spacer'>
-                        Content Spacer 1 - Forces page break
+                        Page 1 Content - TechCorp Context
                     </div>
 
+                    <!-- Page 2: Manufacturing Content with different hidden data -->
                     <div class='company-section'>
-                        <div class='company-title'>Second Company Section</div>
+                        <!-- Hidden data divs for this page context -->
+                        <div id='data-organization' style='display: none;'>Global Manufacturing Ltd</div>
+                        <div id='data-division' style='display: none;'>Operations</div>
+                        <div id='data-project' style='display: none;'>Quality Assurance</div>
+
+                        <div class='company-title'>Global Manufacturing Ltd.</div>
                         <div class='company-details'>
-                            <p>This content should appear on a new page with the same repeating header showing zone information.</p>
-                            <p>The header will automatically repeat because we're using proper HTML header structure.</p>
+                            <p><strong>Organization:</strong> Global Manufacturing Ltd</p>
+                            <p><strong>Division:</strong> Operations</p>
+                            <p><strong>Project:</strong> Quality Assurance</p>
+                            <p>This is the second company section. The header should now show Manufacturing's zone information.</p>
                         </div>
                     </div>
 
                     <div class='page-spacer'>
-                        Content Spacer 2 - Forces another page break
+                        Page 2 Content - Manufacturing Context
                     </div>
 
+                    <!-- Page 3: Finance Content with different hidden data -->
                     <div class='company-section'>
-                        <div class='company-title'>Third Company Section</div>
+                        <!-- Hidden data divs for this page context -->
+                        <div id='data-organization' style='display: none;'>Finance First Bank</div>
+                        <div id='data-division' style='display: none;'>Investment Banking</div>
+                        <div id='data-project' style='display: none;'>Market Analysis</div>
+
+                        <div class='company-title'>Finance First Bank</div>
                         <div class='company-details'>
-                            <p>This is the third section, demonstrating that the header continues to repeat across multiple page breaks.</p>
-                            <p>Zone info should consistently show the same context data across all pages.</p>
+                            <p><strong>Organization:</strong> Finance First Bank</p>
+                            <p><strong>Division:</strong> Investment Banking</p>
+                            <p><strong>Project:</strong> Market Analysis</p>
+                            <p>This is the third company section. The header should now show Finance's zone information.</p>
                         </div>
                     </div>
 
                     <div class='page-spacer'>
-                        Content Spacer 3 - Forces final page break
+                        Page 3 Content - Finance Context
                     </div>
 
+                    <!-- Page 4: Healthcare Content with different hidden data -->
                     <div class='company-section'>
-                        <div class='company-title'>Final Section</div>
+                        <!-- Hidden data divs for this page context -->
+                        <div id='data-organization' style='display: none;'>Healthcare Systems Corp</div>
+                        <div id='data-division' style='display: none;'>Clinical Research</div>
+                        <div id='data-project' style='display: none;'>Drug Development</div>
+
+                        <div class='company-title'>Healthcare Systems Corp</div>
                         <div class='company-details'>
-                            <p>Final section to verify header repetition works consistently.</p>
-                            <p><strong>Expected:</strong> Header appears on all pages with zone info: 'Level: Global Tech Solutions > Software Development > Cloud Migration Initiative'</p>
+                            <p><strong>Organization:</strong> Healthcare Systems Corp</p>
+                            <p><strong>Division:</strong> Clinical Research</p>
+                            <p><strong>Project:</strong> Drug Development</p>
+                            <p><strong>Expected:</strong> Header should show different context per page based on the hidden data divs!</p>
                         </div>
                     </div>
 
@@ -649,10 +678,14 @@ namespace ProjectZoneInfo.Tests
                 TestContext.WriteLine("Expected behavior (to verify manually in PDF):");
                 TestContext.WriteLine("- Header should appear on ALL pages (not just the first)");
                 TestContext.WriteLine("- Footer should appear on ALL pages with page numbers");
-                TestContext.WriteLine("- Zone info should show: 'Level: Global Tech Solutions > Software Development > Cloud Migration Initiative'");
-                TestContext.WriteLine("- Content should be properly spaced across multiple pages");
+                TestContext.WriteLine("- Zone info should CHANGE per page based on hidden data divs:");
+                TestContext.WriteLine("  * Page 1: 'Level: TechCorp Solutions > Software Engineering > Cloud Platform'");
+                TestContext.WriteLine("  * Page 2: 'Level: Global Manufacturing Ltd > Operations > Quality Assurance'");
+                TestContext.WriteLine("  * Page 3: 'Level: Finance First Bank > Investment Banking > Market Analysis'");
+                TestContext.WriteLine("  * Page 4: 'Level: Healthcare Systems Corp > Clinical Research > Drug Development'");
                 TestContext.WriteLine("");
-                TestContext.WriteLine("This test uses proper HTML <header> and <footer> elements for automatic repetition.");
+                TestContext.WriteLine("This test uses hidden data divs with IDs to provide context-specific data per page section.");
+                TestContext.WriteLine("The ProjectZoneInfo component should detect and use these hidden div values instead of global params.");
             }
         }
     }

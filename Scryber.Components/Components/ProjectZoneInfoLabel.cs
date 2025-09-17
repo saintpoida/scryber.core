@@ -331,13 +331,141 @@ namespace Scryber.Components
 
         private string TryGetComponentData(Component component, string fieldName)
         {
-            // For now, this is a placeholder for more sophisticated data access
-            // In a real implementation, this might check:
-            // - Component's local data context
-            // - Bound data items
-            // - Parent component's data
-            // - etc.
+            // Look for hidden data divs with specific IDs on the current page
+            // Format: data-{fieldName}-{pageIndex} or data-{fieldName}
+            if (_renderpageindex >= 0 && _doc != null)
+            {
+                try
+                {
+                    // Method 1: Look for page-specific data div IDs
+                    string pageSpecificId = $"data-{fieldName}-page{_renderpageindex}";
+                    var pageSpecificValue = FindHiddenDataById(pageSpecificId);
+                    if (!string.IsNullOrEmpty(pageSpecificValue))
+                        return pageSpecificValue;
 
+                    // Method 2: Look for general data div IDs on current page content
+                    string generalId = $"data-{fieldName}";
+                    var generalValue = FindHiddenDataById(generalId);
+                    if (!string.IsNullOrEmpty(generalValue))
+                        return generalValue;
+
+                    // Method 3: Look for data attributes in page content
+                    var dataAttrValue = FindDataAttributeOnPage(fieldName);
+                    if (!string.IsNullOrEmpty(dataAttrValue))
+                        return dataAttrValue;
+                }
+                catch
+                {
+                    // Continue if data extraction fails
+                }
+            }
+
+            return null;
+        }
+
+        private string FindHiddenDataById(string elementId)
+        {
+            if (_doc == null || _renderpageindex < 0 || _renderpageindex >= _doc.AllPages.Count)
+                return null;
+
+            try
+            {
+                var page = _doc.AllPages[_renderpageindex];
+                if (page is PDFLayoutPage layoutPage)
+                {
+                    // Recursively search for components with the specified ID
+                    var foundComponent = SearchForComponentById(layoutPage.Owner as Component, elementId);
+                    if (foundComponent != null)
+                    {
+                        // Try to extract text content from the found component
+                        if (foundComponent is TextBase textComp)
+                        {
+                            // Access the text content if possible
+                            return ExtractTextFromComponent(textComp);
+                        }
+                        else if (foundComponent is Component comp)
+                        {
+                            // Try to get text from child components
+                            return ExtractTextFromComponentHierarchy(comp);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore errors in data extraction
+            }
+
+            return null;
+        }
+
+        private Component SearchForComponentById(Component root, string targetId)
+        {
+            if (root == null)
+                return null;
+
+            // Check if this component has the target ID
+            if (!string.IsNullOrEmpty(root.ID) && root.ID == targetId)
+                return root;
+
+            // Search in child components if this is a container
+            if (root is IContainerComponent container && container.Content != null)
+            {
+                foreach (Component child in container.Content)
+                {
+                    var found = SearchForComponentById(child, targetId);
+                    if (found != null)
+                        return found;
+                }
+            }
+
+            return null;
+        }
+
+        private string ExtractTextFromComponent(TextBase textComponent)
+        {
+            try
+            {
+                // We can't access BaseText directly from outside the class due to protected access
+                // For now, we'll try alternative approaches or simplified data access
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string ExtractTextFromComponentHierarchy(Component component)
+        {
+            try
+            {
+                // Look for text in immediate children
+                if (component is IContainerComponent container && container.Content != null)
+                {
+                    foreach (Component child in container.Content)
+                    {
+                        if (child is TextBase textChild)
+                        {
+                            var text = ExtractTextFromComponent(textChild);
+                            if (!string.IsNullOrEmpty(text))
+                                return text;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore extraction errors
+            }
+
+            return null;
+        }
+
+        private string FindDataAttributeOnPage(string fieldName)
+        {
+            // This could be extended to search for data attributes in the page content
+            // For now, return null as we're focusing on the hidden div approach
             return null;
         }
 
