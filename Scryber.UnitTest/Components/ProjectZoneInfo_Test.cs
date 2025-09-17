@@ -8,7 +8,7 @@ using Scryber.PDF.Layout;
 using Scryber.PDF;
 using Scryber;
 
-namespace Scryber.Core.UnitTests.Components
+namespace Scryber.Core.UnitTests.ProjectZoneInfoTests
 {
     [TestClass()]
     public class ProjectZoneInfo_Test

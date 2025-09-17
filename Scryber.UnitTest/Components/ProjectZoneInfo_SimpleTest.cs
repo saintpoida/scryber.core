@@ -2,7 +2,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scryber.Components;
 
-namespace Scryber.Core.UnitTests.Components
+namespace Scryber.Core.UnitTests.ProjectZoneInfoTests
 {
     [TestClass()]
     public class ProjectZoneInfo_SimpleTest
