@@ -477,5 +477,183 @@ namespace ProjectZoneInfo.Tests
                 TestContext.WriteLine("- Footer: 'Generated for: Level: Global Industries Inc > ERP System Upgrade'");
             }
         }
+
+        [TestMethod]
+        [TestCategory("Integration")]
+        public void Integration_PageBreaks_RepeatingHeader_ContextSwitching_Test()
+        {
+            // Test proper repeating headers using HTML <header> element that Scryber understands
+
+            string html = @"<!DOCTYPE html>
+                <html xmlns='http://www.w3.org/1999/xhtml'>
+                <head>
+                    <title>Page Break Repeating Header Test</title>
+                    <style>
+                        header {
+                            padding: 15px;
+                            background-color: #f8f9fa;
+                            border-bottom: 2px solid #007bff;
+                            margin-bottom: 20px;
+                            text-align: center;
+                        }
+                        .header-title {
+                            font-size: 16pt;
+                            font-weight: bold;
+                            color: #007bff;
+                            margin-bottom: 5px;
+                        }
+                        .header-context {
+                            font-size: 12pt;
+                            color: #666;
+                        }
+                        footer {
+                            margin-top: 30px;
+                            padding: 10px;
+                            text-align: center;
+                            font-size: 10pt;
+                            color: #999;
+                            border-top: 1px solid #ddd;
+                        }
+                        .company-section {
+                            margin: 30px 0;
+                            padding: 20px;
+                            border: 1px solid #ddd;
+                        }
+                        .company-title {
+                            font-size: 18pt;
+                            font-weight: bold;
+                            color: #0066cc;
+                            margin-bottom: 15px;
+                        }
+                        .company-details {
+                            font-size: 12pt;
+                            line-height: 1.6;
+                        }
+                        .page-spacer {
+                            height: 400px;
+                            background: repeating-linear-gradient(
+                                90deg,
+                                #f8f9fa,
+                                #f8f9fa 20px,
+                                #e9ecef 20px,
+                                #e9ecef 40px
+                            );
+                            border: 1px solid #ddd;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 14pt;
+                            color: #666;
+                            margin: 20px 0;
+                            page-break-after: always;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <!-- Proper HTML header that should repeat on every page -->
+                    <header>
+                        <div class='header-title'>Project Zone Information Report</div>
+                        <div class='header-context'>
+                            Current Context: <projectzoneinfo data-level0name='organization' data-level1name='division' data-level2name='project' />
+                        </div>
+                    </header>
+
+                    <!-- Main content that will cause page breaks -->
+                    <div class='company-section'>
+                        <div class='company-title'>First Company Section</div>
+                        <div class='company-details'>
+                            <p><strong>Organization:</strong> Global Tech Solutions</p>
+                            <p><strong>Division:</strong> Software Development</p>
+                            <p><strong>Project:</strong> Cloud Migration Initiative</p>
+                            <p>This is the first section of our report. The header above should contain the zone information and repeat on every page as content flows.</p>
+                        </div>
+                    </div>
+
+                    <div class='page-spacer'>
+                        Content Spacer 1 - Forces page break
+                    </div>
+
+                    <div class='company-section'>
+                        <div class='company-title'>Second Company Section</div>
+                        <div class='company-details'>
+                            <p>This content should appear on a new page with the same repeating header showing zone information.</p>
+                            <p>The header will automatically repeat because we're using proper HTML header structure.</p>
+                        </div>
+                    </div>
+
+                    <div class='page-spacer'>
+                        Content Spacer 2 - Forces another page break
+                    </div>
+
+                    <div class='company-section'>
+                        <div class='company-title'>Third Company Section</div>
+                        <div class='company-details'>
+                            <p>This is the third section, demonstrating that the header continues to repeat across multiple page breaks.</p>
+                            <p>Zone info should consistently show the same context data across all pages.</p>
+                        </div>
+                    </div>
+
+                    <div class='page-spacer'>
+                        Content Spacer 3 - Forces final page break
+                    </div>
+
+                    <div class='company-section'>
+                        <div class='company-title'>Final Section</div>
+                        <div class='company-details'>
+                            <p>Final section to verify header repetition works consistently.</p>
+                            <p><strong>Expected:</strong> Header appears on all pages with zone info: 'Level: Global Tech Solutions > Software Development > Cloud Migration Initiative'</p>
+                        </div>
+                    </div>
+
+                    <!-- Footer that should also repeat -->
+                    <footer>
+                        Generated by Scryber PDF - Zone Info Test | Page <page />
+                    </footer>
+                </body>
+                </html>";
+
+            using (var sr = new StringReader(html))
+            {
+                var doc = Document.ParseDocument(sr, ParseSourceType.DynamicContent);
+
+                // Add zone information parameters - this creates the global fallback
+                doc.Params.Add("organization", "Global Tech Solutions");
+                doc.Params.Add("division", "Software Development");
+                doc.Params.Add("project", "Cloud Migration Initiative");
+
+                // EXPERIMENT: Try to set up different contexts per page using layout events
+                doc.LayoutComplete += (sender, args) =>
+                {
+                    // This is called after layout but might be too late for context switching
+                    // The real challenge is that we need different data contexts DURING layout
+                    // not after layout is complete
+                };
+
+                // Output to a physical file within project
+                string testOutputPath = System.IO.Path.Combine("test-output", "ProjectZoneInfo_PageBreak_RepeatingHeader_Test.pdf");
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(testOutputPath));
+
+                using (var fileStream = new FileStream(testOutputPath, FileMode.Create))
+                {
+                    doc.SaveAsPDF(fileStream);
+                }
+
+                // Verify and report
+                Assert.IsTrue(File.Exists(testOutputPath), $"PDF file should be created at: {testOutputPath}");
+                var fileInfo = new FileInfo(testOutputPath);
+                Assert.IsTrue(fileInfo.Length > 2000, $"PDF should have content. Size: {fileInfo.Length} bytes");
+
+                TestContext.WriteLine($"Page break repeating header test PDF created at: {testOutputPath}");
+                TestContext.WriteLine($"File size: {fileInfo.Length:N0} bytes");
+                TestContext.WriteLine("");
+                TestContext.WriteLine("Expected behavior (to verify manually in PDF):");
+                TestContext.WriteLine("- Header should appear on ALL pages (not just the first)");
+                TestContext.WriteLine("- Footer should appear on ALL pages with page numbers");
+                TestContext.WriteLine("- Zone info should show: 'Level: Global Tech Solutions > Software Development > Cloud Migration Initiative'");
+                TestContext.WriteLine("- Content should be properly spaced across multiple pages");
+                TestContext.WriteLine("");
+                TestContext.WriteLine("This test uses proper HTML <header> and <footer> elements for automatic repetition.");
+            }
+        }
     }
 }

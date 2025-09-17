@@ -246,7 +246,47 @@ namespace Scryber.Components
             if (string.IsNullOrEmpty(fieldName) || _layoutContext == null)
                 return null;
 
-            // 1. Try to get data from context Items using the indexer (PDFItemCollection inherits from NameObjectCollectionBase)
+            // 1. Try to get data from page-specific context first (if we have a page index)
+            if (_renderpageindex >= 0 && _doc != null && _doc.AllPages != null && _renderpageindex < _doc.AllPages.Count)
+            {
+                try
+                {
+                    var page = _doc.AllPages[_renderpageindex];
+                    if (page is PDFLayoutPage layoutPage)
+                    {
+                        // Try to get data from the page's owner component if it has parameters
+                        var pageComponent = layoutPage.Owner;
+                        if (pageComponent != null)
+                        {
+                            // Look for data in the page component's hierarchy
+                            var comp = pageComponent;
+                            while (comp != null)
+                            {
+                                // Check if component has params/data context
+                                if (comp is Component withParams)
+                                {
+                                    // Try to access data through various methods
+                                    try
+                                    {
+                                        // Method 1: Check if component has direct access to data
+                                        var dataValue = TryGetComponentData(withParams, fieldName);
+                                        if (!string.IsNullOrEmpty(dataValue))
+                                            return dataValue;
+                                    }
+                                    catch { }
+                                }
+                                comp = comp.Parent;
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    // Continue to global context if page-specific fails
+                }
+            }
+
+            // 2. Try to get data from global context Items
             try
             {
                 if (_layoutContext.Items != null)
@@ -258,12 +298,46 @@ namespace Scryber.Components
             }
             catch
             {
-                // Continue to next method if indexer fails
+                // Continue to document parameters
             }
 
-            // 2. For now, return null - we can add more sophisticated data access later
-            // TODO: Add DataStack access when we understand the full data binding context
-            
+            // 3. Try to get data from document parameters
+            try
+            {
+                if (_layoutContext.Document != null && _layoutContext.Document is Document doc)
+                {
+                    if (doc.Params != null)
+                    {
+                        try
+                        {
+                            var value = doc.Params[fieldName];
+                            if (value != null)
+                                return value.ToString();
+                        }
+                        catch
+                        {
+                            // Parameter doesn't exist, continue
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Final fallback
+            }
+
+            return null;
+        }
+
+        private string TryGetComponentData(Component component, string fieldName)
+        {
+            // For now, this is a placeholder for more sophisticated data access
+            // In a real implementation, this might check:
+            // - Component's local data context
+            // - Bound data items
+            // - Parent component's data
+            // - etc.
+
             return null;
         }
 
