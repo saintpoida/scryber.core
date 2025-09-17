@@ -244,8 +244,7 @@ namespace Scryber.Components
 
             // Join non-empty parts with " > " separator and add "Level: " prefix
             string zoneText = zoneParts.Count > 0 ? string.Join(" > ", zoneParts) : "No zone info available";
-            string debugPrefix = $"[{string.Join(", ", debugInfo)}] ";
-            return debugPrefix + "Level: " + zoneText;
+            return "Level: " + zoneText;
         }
 
         private string GetDataValue(string fieldName)

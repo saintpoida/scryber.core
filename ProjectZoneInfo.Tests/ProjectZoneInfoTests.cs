@@ -645,10 +645,10 @@ namespace ProjectZoneInfo.Tests
             {
                 var doc = Document.ParseDocument(sr, ParseSourceType.DynamicContent);
 
-                // Add zone information parameters - this creates the global fallback
-                doc.Params.Add("organization", "Global Tech Solutions");
-                doc.Params.Add("division", "Software Development");
-                doc.Params.Add("project", "Cloud Migration Initiative");
+                // REMOVED: Global fallback parameters so we can see if page-specific data works
+                // doc.Params.Add("organization", "Global Tech Solutions");
+                // doc.Params.Add("division", "Software Development");
+                // doc.Params.Add("project", "Cloud Migration Initiative");
 
                 // EXPERIMENT: Try to set up different contexts per page using layout events
                 doc.LayoutComplete += (sender, args) =>
